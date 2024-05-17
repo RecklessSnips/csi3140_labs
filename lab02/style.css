@@ -1,0 +1,41 @@
+.main {
+  margin: 50px 200px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.education-content {
+  display: flex;
+  justify-content: space-between;
+}
+
+.skills-matching {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.skill-name {
+  font-weight: bold;
+}
+
+.skills {
+  margin-left: 70px;
+}
+
+.work-title {
+  display: flex;
+  justify-content: space-between;
+}
+
+h1,
+h3 {
+  margin-top: 5px;
+  margin-bottom: 1px;
+}
+
+hr {
+  margin: 0;
+}
