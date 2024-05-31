@@ -1,6 +1,14 @@
+// Step 1
 let gameBoard = [];
 let position = 0;
-// Step 1
+let score = 0;
+
+// Step 4
+const gainScore = () => {
+  score++;
+};
+
+// Step 2
 const createGame = (length) => {
   let l = length / 2 - 1;
   for (let i = 0; i < l; i++) {
@@ -21,23 +29,31 @@ createGame(10);
 console.log(gameBoard);
 console.log("C's position: ", position);
 
-// Step 2
+// Step 3
 const moveLeft = () => {
   let left = position - 1;
-  gameBoard[left] = gameBoard[position] + gameBoard[left];
+  if (gameBoard[left] != "") {
+    gainScore();
+  }
+  gameBoard[left] = "C" + gameBoard[left];
   gameBoard[position] = "";
   position = position - 1;
   console.log(gameBoard);
   console.log("C's position after move left: ", position);
+  console.log("Player score: ", score);
 };
-// moveLeft();
+moveLeft();
 
 const moveRight = () => {
   let right = position + 1;
-  gameBoard[right] = gameBoard[position] + gameBoard[right];
+  if (gameBoard[right] != "") {
+    gainScore();
+  }
+  gameBoard[right] = "C" + gameBoard[right];
   gameBoard[position] = "";
   position = position + 1;
   console.log(gameBoard);
   console.log("C's position after move right: ", position);
+  console.log("Player score: ", score);
 };
 moveRight();
