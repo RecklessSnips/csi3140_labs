@@ -1,6 +1,8 @@
 // Step 1
 let gameBoard = [];
-let position = 0;
+let ghostDirection = "left";
+let pacman = 0;
+let ghost = 0;
 let score = 0;
 
 const printBoard = () => {
@@ -26,45 +28,96 @@ const createGame = (length) => {
   gameBoard.push(".");
   gameBoard.push("^.");
 
-  position = gameBoard.indexOf("C");
+  pacman = gameBoard.indexOf("C");
+  ghost = gameBoard.indexOf("^.");
 };
 
 createGame(10);
 printBoard();
-console.log("C's position: ", position);
+
+const gameEnd = () => {
+  console.log("Game ends.");
+  clearInterval(interval);
+  clearInterval(moveInterval);
+  printBoard();
+  console.log("C's position: ", pacman);
+  console.log("Ghost's position: ", ghost);
+};
 
 // Step 3
-const moveLeft = () => {
-  let left = position - 1;
-  if (gameBoard[left] != "") {
-    gainScore();
+const moveLeft = (id) => {
+  if (id == "p") {
+    let left = pacman - 1;
+    if (gameBoard[left] != "") {
+      gainScore();
+    }
+    gameBoard[left] = "C" + gameBoard[left];
+    gameBoard[pacman] = "";
+    pacman = pacman - 1;
+    printBoard();
+    console.log("C's position after move left: ", pacman);
+    console.log("Player score: ", score);
   }
-  gameBoard[left] = "C" + gameBoard[left];
-  gameBoard[position] = "";
-  position = position - 1;
-  printBoard();
-  console.log("C's position after move left: ", position);
-  console.log("Player score: ", score);
-};
-moveLeft();
-moveLeft();
-moveLeft();
-
-const moveRight = () => {
-  let right = position + 1;
-  if (gameBoard[right] != "") {
-    gainScore();
+  if (id == "g") {
+    let left = ghost - 1;
+    if (left < 0) {
+      ghostDirection = "right";
+      return;
+    }
+    gameBoard[left] = "^" + gameBoard[left];
+    let tmp = gameBoard[ghost];
+    gameBoard[ghost] = tmp.replace("^", "");
+    ghost = ghost - 1;
+    if (ghost == pacman) {
+      gameEnd();
+      return;
+    }
+    printBoard();
+    console.log("Ghost after move left: ", ghost);
   }
-  gameBoard[right] = "C" + gameBoard[right];
-  gameBoard[position] = "";
-  position = position + 1;
-  printBoard();
-  console.log("C's position after move right: ", position);
-  console.log("Player score: ", score);
 };
-moveRight();
+// moveLeft("p");
+// moveLeft("p");
+// moveLeft("p");
+moveLeft("g");
 
-printBoard();
+const moveRight = (id) => {
+  if (id == "p") {
+    let right = pacman + 1;
+    if (gameBoard[right] != "") {
+      gainScore();
+      return;
+    }
+    gameBoard[right] = "C" + gameBoard[right];
+    gameBoard[pacman] = "";
+    pacman = pacman + 1;
+    printBoard();
+    console.log("C's pacman after move right: ", pacman);
+    console.log("Player score: ", score);
+  }
+
+  if (id == "g") {
+    let right = ghost + 1;
+    if (right >= gameBoard.length) {
+      ghostDirection = "left";
+      return;
+    }
+    gameBoard[right] = "^" + gameBoard[right];
+    let tmp = gameBoard[ghost];
+    gameBoard[ghost] = tmp.replace("^", "");
+    ghost = ghost + 1;
+    if (ghost == pacman) {
+      gameEnd();
+      return;
+    }
+    printBoard();
+    console.log("Ghost after move right: ", ghost);
+  }
+};
+// moveRight('p');
+moveRight("g");
+
+// printBoard();
 // Step 5
 const resetBoard = () => {
   for (let i = 0; i < gameBoard.length; i++) {
@@ -75,4 +128,23 @@ const resetBoard = () => {
   printBoard();
 };
 
-resetBoard();
+// resetBoard();
+
+// Step 6
+const ghostMove = () => {
+  if (ghostDirection === "left") {
+    moveLeft("g");
+  } else {
+    moveRight("g");
+  }
+};
+
+let interval = setInterval(() => {
+  if (ghostDirection === "left") {
+    ghostDirection = "right";
+  } else {
+    ghostDirection = "left";
+  }
+}, 2000);
+
+let moveInterval = setInterval(ghostMove, 300);
