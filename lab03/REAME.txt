@@ -1,0 +1,3 @@
+To run:
+
+run the code and after seversal seconds it will print the game board, a sample result can be seen from the result.png
